@@ -2,8 +2,5 @@ services:
   - type: web
     name: half-lips
     env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "waitress-serve --port $PORT api.index:app"
-    envVars:
-      - key: FLASK_ENV
-        value: production
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn api.index:app
