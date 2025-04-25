@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - HalfLips{% endblock %}
+
+{% block content %}
+    <h1>Welcome to HalfLips</h1>
+
+    {% if current_user.is_authenticated %}
+        <p>Welcome, {{ current_user.username }}! <a href="{{ url_for('logout') }}">Logout</a></p>
+        <form action="{{ url_for('post') }}" method="post">
+            <textarea name="content" required maxlength="280"></textarea>
+            <button type="submit">Post</button>
+        </form>
+    {% else %}
+        <a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a>
+    {% endif %}
+
+    <h2>Posts</h2>
+    {% for post in posts %}
+        <div>
+            <img src="{{ url_for('static', filename='profile_pics/' + (post.user.profile_pic or 'default.png')) }}" width="50" height="50">
+            <strong>{{ post.user.username }}</strong>: {{ post.content }}
+            <br>
+            <small>{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+        </div>
+        <hr>
+    {% endfor %}
+{% endblock %}

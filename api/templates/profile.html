@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ user.username }}'s Profile - HalfLips{% endblock %}
+
+{% block content %}
+    <h1>{{ user.username }}'s Profile</h1>
+
+    <div style="display: flex;">
+        <!-- Left side: Display posts (Leets) -->
+        <div style="width: 50%; padding-right: 20px;">
+            <h2>Leets (Posts)</h2>
+            {% for post in user.posts %}
+                <div>
+                    <p>{{ post.content }}</p>
+                    <small>{{ post.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                    <hr>
+                </div>
+            {% else %}
+                <p>No posts yet.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Right side: Display user info and edit button -->
+        <div style="width: 50%;">
+            <img src="{{ url_for('static', filename='profile_pics/' + (user.profile_pic if user.profile_pic else 'default.png')) }}" alt="Profile Picture" width="150">
+            <h3>{{ user.display_name if user.display_name else user.username }}</h3>
+            <p><strong>Bio:</strong> {{ user.bio if user.bio else 'No bio available.' }}</p>
+            <p><strong>Birthdate:</strong> {{ user.birthdate.strftime('%Y-%m-%d') if user.birthdate else 'Not provided.' }}</p>
+            
+            {% if current_user.id == user.id %}
+                <a href="{{ url_for('edit_profile') }}">Edit Profile</a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
